@@ -101,6 +101,15 @@ public class SQL {
         return lastRecord;
     }
 
+    public static String getRecordByID(String tableName, String id){
+
+        String recordByID;
+
+        recordByID = "SELECT * FROM "+tableName+" WHERE Id = '"+id+"';";
+
+        return recordByID;
+    }
+
 
 
 

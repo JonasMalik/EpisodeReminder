@@ -94,6 +94,5 @@
         android:visibility="gone"
         android:id="@+id/myID"/>
 
-
 </RelativeLayout>
 

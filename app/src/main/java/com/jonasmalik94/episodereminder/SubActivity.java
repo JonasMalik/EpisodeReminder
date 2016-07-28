@@ -1,6 +1,8 @@
 package com.jonasmalik94.episodereminder;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -34,10 +36,21 @@ public class SubActivity extends AppCompatActivity {
         arrayOfRows = new ArrayList<>();
 
         Intent intent = getIntent();
-        String myTitle = intent.getStringExtra("title"); //if it's a string you stored.
-        String myRating = intent.getStringExtra("rating"); //if it's a string you stored.
+        String myID = intent.getStringExtra("ID"); //if it's a string you stored.
 
-        SubListRow newRow = new SubListRow(myRating, "-", "-", "1");
+        final SQLiteDatabase db;
+
+        db=openOrCreateDatabase("EpisodeReminder", MODE_PRIVATE, null);
+        Cursor c = db.rawQuery(SQL.getRecordByID("series",myID), null);
+        c.moveToNext();
+        String id          = c.getString(0);
+        String title          = c.getString(1);
+        String episode        = c.getString(2);
+        String season         = c.getString(3);
+        String is_over        = c.getString(4);
+        String rating         = c.getString(5);
+
+        SubListRow newRow = new SubListRow(title, season, episode, rating);
         arrayOfRows.add(newRow);
 
         adapter = new SubListAdapter(this, arrayOfRows);

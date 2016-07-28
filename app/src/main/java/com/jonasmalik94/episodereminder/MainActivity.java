@@ -220,13 +220,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 // Getting the clicked list item by position
                 View view1 = listView.getAdapter().getView(position, null, listView);
-                TextView title = (TextView) view1.findViewById(R.id.movie_title);
                 TextView myID = (TextView) view1.findViewById(R.id.myID);
 
                 // Opens a new view
                 Intent myIntent = new Intent(MainActivity.this, SubActivity.class);
-                myIntent.putExtra("title", title.getText());
-                myIntent.putExtra("rating", myID.getText());
+                myIntent.putExtra("ID", myID.getText());
                 MainActivity.this.startActivity(myIntent);
             }
 
