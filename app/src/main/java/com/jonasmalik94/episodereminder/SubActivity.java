@@ -50,7 +50,7 @@ public class SubActivity extends AppCompatActivity {
         String is_over        = c.getString(4);
         String rating         = c.getString(5);
 
-        SubListRow newRow = new SubListRow(title, season, episode, rating);
+        SubListRow newRow = new SubListRow(title, season, episode, rating , id);
         arrayOfRows.add(newRow);
 
         adapter = new SubListAdapter(this, arrayOfRows);

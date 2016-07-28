@@ -9,15 +9,19 @@ public class SubListRow {
     private String episode;
     private String rating;
 
+    private String mySubID;
+
     public SubListRow(String title,
                       String season,
                       String episode,
-                      String rating) {
+                      String rating,
+                      String mySubID) {
 
         this.title = title;
         this.season = season;
         this.episode = episode;
         this.rating = rating;
+        this.mySubID = mySubID;
     }
 
     public String getTitle() {
@@ -50,5 +54,13 @@ public class SubListRow {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public String getMySubID() {
+        return mySubID;
+    }
+
+    public void setMySubID(String mySubID) {
+        this.mySubID = mySubID;
     }
 }

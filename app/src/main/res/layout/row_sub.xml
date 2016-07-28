@@ -1,12 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:drawable/dialog_holo_dark_frame"
     android:paddingBottom="4dp"
     android:paddingTop="20dp"
     android:paddingStart="5dp"
     android:paddingEnd="5dp">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="ID"
+        android:visibility="gone"
+        android:id="@+id/mySubID"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -83,18 +90,33 @@
         android:textSize="25sp"
         android:layout_toEndOf="@+id/episode_text"
         android:layout_below="@+id/last_seen"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/dialog_frame"
+        android:textColor="@color/white"
+        android:text="Klar med avsnitt "
+        android:layout_below="@+id/episode"
+        android:layout_marginTop="20dp"
+        android:id="@+id/new_episode"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="@android:drawable/dialog_frame"
+        android:text="Klar med säsong "
+        android:layout_below="@+id/new_episode"
+        android:id="@+id/new_season"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <ImageView
         android:id="@+id/sub_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_alignParentBottom="true"
+        android:gravity="end"
         android:layout_alignParentEnd="true"
-        android:clickable="true"
-        android:src="@android:drawable/btn_star_big_off"
-        app:backgroundTint="#900000"/>
-
-
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:layout_below="@+id/last_seen"
+        android:src="@android:drawable/btn_star_big_off" />
 
 </RelativeLayout>

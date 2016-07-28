@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
         TextView season = (TextView) convertView.findViewById(R.id.season);
         TextView episode = (TextView) convertView.findViewById(R.id.episode);
         TextView myID = (TextView) convertView.findViewById(R.id.myID);
-        ImageView rating = (ImageView) convertView.findViewById(R.id.rating);
+        final ImageView rating = (ImageView) convertView.findViewById(R.id.rating);
 
 
         // Populate the data into the template view using the data object
@@ -47,6 +48,16 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
         }else {
             rating.setImageResource(android.R.drawable.btn_star_big_on);
         }
+
+        // All handlers for click event
+        final View finalConvertView = convertView;
+        rating.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                TextView id = (TextView) finalConvertView.findViewById(R.id.myID);
+                Toast.makeText(getContext(), id.getText(), Toast.LENGTH_LONG).show();
+                rating.setImageResource(android.R.drawable.btn_star_big_off);
+            }
+        });
 
         // Return the completed view to render on screen
         return convertView;
