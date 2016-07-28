@@ -11,12 +11,21 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.jonasmalik94.gymlog.MainActivity"
     tools:showIn="@layout/app_bar_main"
-    android:id="@+id/main">
+    android:id="@+id/main"
+    android:background="#3a3a3a"
+    >
 
     <ListView
         android:id="@+id/list"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:dividerHeight="0dp"/>
+
+    <TextView
+        android:id="@+id/blur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#8d000000"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

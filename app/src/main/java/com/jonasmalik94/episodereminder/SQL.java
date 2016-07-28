@@ -92,6 +92,15 @@ public class SQL {
         return selectAll;
     }
 
+    public static String getLastRecord(String tableName){
+
+        String lastRecord;
+
+        lastRecord = "SELECT * FROM "+tableName+" WHERE Id = (SELECT MAX(Id) FROM "+tableName+");";
+
+        return lastRecord;
+    }
+
 
 
 

@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
-    android:orientation="horizontal"
+    android:layout_height="200dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:drawable/dialog_holo_dark_frame"
     android:paddingBottom="4dp"
     android:paddingTop="20dp"
@@ -9,27 +9,35 @@
     android:paddingEnd="5dp">
 
     <TextView
-        android:id="@+id/movie_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:gravity="start"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:textSize="35sp"
         android:text="Title"
         android:textColor="@color/white"
-        android:textSize="35sp"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/sub_title"/>
+    <View
+        android:id="@+id/h_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/darkRed"
+        android:layout_below="@id/sub_title"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/darkRed"
-        android:layout_below="@id/movie_title"
-        android:id="@+id/underline"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="wrap_content"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:layout_marginBottom="2dp"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:text="Senast sedda avsnitt:"
+        android:id="@+id/last_seen"
+        android:layout_below="@id/h_line"/>
 
     <TextView
         android:id="@+id/season_text"
@@ -42,7 +50,7 @@
         android:textColor="@color/white"
         android:textSize="25sp"
         android:layout_alignParentStart="false"
-        android:layout_below="@+id/underline"/>
+        android:layout_below="@+id/last_seen"/>
     <TextView
         android:id="@+id/season"
         android:layout_width="wrap_content"
@@ -52,7 +60,7 @@
         android:textColor="@color/white"
         android:textSize="25sp"
         android:layout_toEndOf="@id/season_text"
-        android:layout_below="@+id/underline"/>
+        android:layout_below="@+id/last_seen"/>
 
     <TextView
         android:id="@+id/episode_text"
@@ -64,7 +72,7 @@
         android:textColor="@color/white"
         android:textSize="25sp"
         android:layout_toEndOf="@+id/season"
-        android:layout_below="@+id/underline"/>
+        android:layout_below="@+id/last_seen"/>
 
     <TextView
         android:id="@+id/episode"
@@ -74,26 +82,19 @@
         android:textColor="@color/white"
         android:textSize="25sp"
         android:layout_toEndOf="@+id/episode_text"
-        android:layout_below="@+id/underline"/>
+        android:layout_below="@+id/last_seen"/>
 
-    <ImageView
-        android:id="@+id/rating"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="end"
+        android:layout_margin="5dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-        android:layout_below="@+id/underline"
-        android:src="@android:drawable/btn_star_big_off" />
+        android:clickable="true"
+        android:src="@android:drawable/btn_star_big_off"
+        app:backgroundTint="#900000"/>
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="ID"
-        android:visibility="gone"
-        android:id="@+id/myID"/>
 
 
 </RelativeLayout>
-

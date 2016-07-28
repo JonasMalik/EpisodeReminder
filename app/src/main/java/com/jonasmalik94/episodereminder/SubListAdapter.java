@@ -13,8 +13,8 @@ import java.util.ArrayList;
 /**
  * Created by jonas on 2016-06-22.
  */
-public class MainListAdapter extends ArrayAdapter<MainListRow> {
-    public MainListAdapter(Context context, ArrayList<MainListRow> users) {
+public class SubListAdapter extends ArrayAdapter<SubListRow> {
+    public SubListAdapter(Context context, ArrayList<SubListRow> users) {
         super(context, 0, users);
     }
 
@@ -22,31 +22,29 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // Get the data item for this position
-        MainListRow row = getItem(position);
+        SubListRow row = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_main, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_sub, parent, false);
         }
 
         // Lookup view for data population
-        TextView title = (TextView) convertView.findViewById(R.id.movie_title);
+        TextView title = (TextView) convertView.findViewById(R.id.sub_title);
         TextView season = (TextView) convertView.findViewById(R.id.season);
         TextView episode = (TextView) convertView.findViewById(R.id.episode);
-        TextView myID = (TextView) convertView.findViewById(R.id.myID);
-        ImageView rating = (ImageView) convertView.findViewById(R.id.rating);
+       // ImageView rating = (ImageView) convertView.findViewById(R.id.rating);
 
 
         // Populate the data into the template view using the data object
         title.setText(row.getTitle());
         season.setText(row.getSeason());
         episode.setText(row.getEpisode());
-        myID.setText(row.getMyID());
-        if (row.getRating().equals("0")){
+       /* if (row.getRating().equals("0")){
             rating.setImageResource(android.R.drawable.btn_star_big_off);
         }else {
             rating.setImageResource(android.R.drawable.btn_star_big_on);
-        }
+        }*/
 
         // Return the completed view to render on screen
         return convertView;

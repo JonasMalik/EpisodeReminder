@@ -22,15 +22,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    ListView listView ;
+    ListView listView;
+    TextView blur;
+    EditText popup_input;
     ArrayList<MainListRow> arrayOfRows = new ArrayList<>();
     ArrayList<String> columns = new ArrayList<>();
     ArrayList<String> values = new ArrayList<>();
@@ -68,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int temp;
         int i = 0;
 
-        while (i < 20){
+        while (i < 2){
 
             // Adding values to DB
             columns.clear();
@@ -82,60 +88,98 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             values.add("13"); // last episode
             values.add("3"); // last season
             values.add("0"); // is over
-            values.add("3"); // rating
+            values.add("1"); // rating
 
             db.execSQL(SQL.insertValues("series", columns, values));
             i++;
         }
         //TEST ENDS HERE!
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
+                // sets a blurry background
+                blur = (TextView) findViewById(R.id.blur);
+                blur.setVisibility(View.VISIBLE);
+                fab.setVisibility(View.INVISIBLE);
+
+                // getting screen size
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
                 int width = (int)(size.x*0.98);
                 int height = (int)(size.y*0.4);
-                LayoutInflater inflater = (LayoutInflater)
-                        getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                PopupWindow pw = new PopupWindow(
-                        inflater.inflate(R.layout.popup, null, false),
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final PopupWindow pw = new PopupWindow(inflater.inflate(R.layout.popup, null, false),
                         width,
                         height,
                         true);
-                // The code below assumes that the root container has an id called 'main'
+
+                // popup button listener
+                Button add = (Button) pw.getContentView().findViewById(R.id.add);
+                add.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String text;
+                        popup_input = (EditText) pw.getContentView().findViewById(R.id.popup_title_input);
+                        text = popup_input.getText().toString();
+                        Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
+                        pw.dismiss();
+
+                        adapter = null;
+
+                        // Adding values to DB
+                        columns.clear();
+                        columns.add("title");
+                        columns.add("last_episode_watched");
+                        columns.add("last_season_watched");
+                        columns.add("is_over");
+                        columns.add("rating");
+                        values.clear();
+                        values.add(text); // title
+                        values.add("-"); // last episode
+                        values.add("-"); // last season
+                        values.add("-"); // is over
+                        values.add("0"); // rating
+
+                        db.execSQL(SQL.insertValues("series", columns, values));
+
+                        Cursor c = db.rawQuery(SQL.getLastRecord("series"), null);
+                        c.moveToNext();
+                        String id             = c.getString(0);
+                        String title          = c.getString(1);
+                        String episode        = c.getString(2);
+                        String season         = c.getString(3);
+                        String is_over        = c.getString(4);
+                        String rating         = c.getString(5);
+
+                        // Adding row to view
+                        MainListRow newRow = new MainListRow(title,season,episode,rating,id);
+                        arrayOfRows.add(0, newRow);
+
+                        adapter = new MainListAdapter(getApplicationContext(), arrayOfRows);
+                        listView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "Ny serie/film är tillagd", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // sets the position of the popup window
                 pw.showAtLocation(findViewById(R.id.main), Gravity.CENTER, 0, -200);
 
-                /*adapter = null;
+                // sets action when popup window is closed
+                pw.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        blur.setVisibility(View.INVISIBLE);
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                });
 
-                // Adding row to view
-                MainListRow newRow = new MainListRow("games","2","5","8");
-                arrayOfRows.add(0, newRow);
-
-                // Adding values to DB
-                columns.clear();
-                columns.add("title");
-                columns.add("last_episode_watched");
-                columns.add("last_season_watched");
-                columns.add("is_over");
-                columns.add("rating");
-                values.clear();
-                values.add("games"); // title
-                values.add("5"); // last episode
-                values.add("2"); // last season
-                values.add("0"); // is over
-                values.add("8"); // rating
-
-                db.execSQL(SQL.insertValues("series", columns, values));
-
-                adapter = new MainListAdapter(getApplicationContext(), arrayOfRows);
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), "Ny serie/film är tillagd", Toast.LENGTH_SHORT).show();*/
             }
         });
 
@@ -154,13 +198,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Cursor c = db.rawQuery(SQL.selectAll("series"), null);
         while (c.moveToNext()) {
+            String id          = c.getString(0);
             String title          = c.getString(1);
             String episode        = c.getString(2);
             String season         = c.getString(3);
             String is_over        = c.getString(4);
             String rating         = c.getString(5);
 
-            MainListRow newRow = new MainListRow(title, season, episode, rating);
+            MainListRow newRow = new MainListRow(title, season, episode, rating, id);
             arrayOfRows.add(newRow);
         }
 
@@ -173,9 +218,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                // Getting the clicked list item by position
+                View view1 = listView.getAdapter().getView(position, null, listView);
+                TextView title = (TextView) view1.findViewById(R.id.movie_title);
+                TextView myID = (TextView) view1.findViewById(R.id.myID);
+
                 // Opens a new view
-                Intent myIntent = new Intent(MainActivity.this, ExerciseActivity.class);
-                myIntent.putExtra("index", Integer.toString(position));
+                Intent myIntent = new Intent(MainActivity.this, SubActivity.class);
+                myIntent.putExtra("title", title.getText());
+                myIntent.putExtra("rating", myID.getText());
                 MainActivity.this.startActivity(myIntent);
             }
 

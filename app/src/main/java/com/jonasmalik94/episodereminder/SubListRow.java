@@ -3,24 +3,21 @@ package com.jonasmalik94.episodereminder;
 /**
  * Created by jonas on 2016-06-22.
  */
-public class MainListRow {
+public class SubListRow {
     private String title;
     private String season;
     private String episode;
     private String rating;
-    private String myID;
 
-    public MainListRow(String title,
-                       String season,
-                       String episode,
-                       String rating,
-                       String myID) {
+    public SubListRow(String title,
+                      String season,
+                      String episode,
+                      String rating) {
 
         this.title = title;
         this.season = season;
         this.episode = episode;
         this.rating = rating;
-        this.myID = myID;
     }
 
     public String getTitle() {
@@ -54,14 +51,4 @@ public class MainListRow {
     public void setRating(String rating) {
         this.rating = rating;
     }
-
-    public String getMyID() {
-        return myID;
-    }
-
-    public void setMyID(String myID) {
-        this.myID = myID;
-    }
-
-
 }
