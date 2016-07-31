@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#000"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
@@ -25,7 +26,8 @@
                 android:id="@+id/toolbarText"
                 android:text="@string/toolbarText"
                 android:gravity="center"
-                android:textSize="30sp"/>
+                android:textSize="30sp"
+                android:visibility="gone"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
@@ -37,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_add"
         app:backgroundTint="#900000"/>
 

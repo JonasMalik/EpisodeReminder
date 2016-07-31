@@ -1,6 +1,8 @@
 package com.jonasmalik94.episodereminder;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +36,10 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
         TextView title = (TextView) convertView.findViewById(R.id.movie_title);
         TextView season = (TextView) convertView.findViewById(R.id.season);
         TextView episode = (TextView) convertView.findViewById(R.id.episode);
-        TextView myID = (TextView) convertView.findViewById(R.id.myID);
+        final TextView myID = (TextView) convertView.findViewById(R.id.myID);
+        final TextView star = (TextView) convertView.findViewById(R.id.star);
         final ImageView rating = (ImageView) convertView.findViewById(R.id.rating);
+
 
 
         // Populate the data into the template view using the data object
@@ -43,6 +47,7 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
         season.setText(row.getSeason());
         episode.setText(row.getEpisode());
         myID.setText(row.getMyID());
+        star.setText(row.getRating());
         if (row.getRating().equals("0")){
             rating.setImageResource(android.R.drawable.btn_star_big_off);
         }else {
@@ -55,7 +60,16 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
             public void onClick(View v) {
                 TextView id = (TextView) finalConvertView.findViewById(R.id.myID);
                 Toast.makeText(getContext(), id.getText(), Toast.LENGTH_LONG).show();
-                rating.setImageResource(android.R.drawable.btn_star_big_off);
+
+                if (star.getText().equals("0")) {
+                    rating.setImageResource(android.R.drawable.btn_star_big_on);
+                    star.setText("1");
+                    SQL.updateRating("series",id.getText().toString(),"rating","1");
+                }else{
+                    rating.setImageResource(android.R.drawable.btn_star_big_off);
+                    star.setText("0");
+                    SQL.updateRating("series", id.getText().toString(),"rating", "0");
+                }
             }
         });
 

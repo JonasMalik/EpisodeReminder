@@ -8,8 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,12 +24,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,8 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ArrayList<String> columns = new ArrayList<>();
     ArrayList<String> values = new ArrayList<>();
     MainListAdapter adapter;
-
-
+    static String path;
 
 
     @Override
@@ -56,16 +60,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //DB setup
         final SQLiteDatabase db;
         db=openOrCreateDatabase("EpisodeReminder", MODE_PRIVATE, null);
+        path = db.getPath();
 
         // Restore DB after restarting APP
-        db.execSQL(SQL.deleteTable("series"));
+        //db.execSQL(SQL.deleteTable("series"));
 
         //Create table if not exist
         columns.clear();
         columns.add("Id INTEGER PRIMARY KEY  NOT NULL  UNIQUE");
         columns.add("title TEXT");
-        columns.add("last_episode_watched TEXT");
-        columns.add("last_season_watched TEXT");
+        columns.add("episode TEXT");
+        columns.add("season TEXT");
         columns.add("is_over TEXT DEFAULT 0");
         columns.add("rating TEXT DEFAULT 0");
         db.execSQL(SQL.createTable("series", columns));
@@ -79,14 +84,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Adding values to DB
             columns.clear();
             columns.add("title");
-            columns.add("last_episode_watched");
-            columns.add("last_season_watched");
+            columns.add("episode");
+            columns.add("season");
             columns.add("is_over");
             columns.add("rating");
             values.clear();
             values.add("The walking dead"); // title
-            values.add("13"); // last episode
-            values.add("3"); // last season
+            values.add("1"); // episode
+            values.add("1"); // season
             values.add("0"); // is over
             values.add("1"); // rating
 
@@ -135,15 +140,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         // Adding values to DB
                         columns.clear();
                         columns.add("title");
-                        columns.add("last_episode_watched");
-                        columns.add("last_season_watched");
+                        columns.add("episode");
+                        columns.add("season");
                         columns.add("is_over");
                         columns.add("rating");
                         values.clear();
                         values.add(text); // title
-                        values.add("-"); // last episode
-                        values.add("-"); // last season
-                        values.add("-"); // is over
+                        values.add("1"); // episode
+                        values.add("1"); // season
+                        values.add("0"); // is over
                         values.add("0"); // rating
 
                         db.execSQL(SQL.insertValues("series", columns, values));
@@ -183,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -219,16 +225,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // Getting the clicked list item by position
-                View view1 = listView.getAdapter().getView(position, null, listView);
+                final View view1 = listView.getAdapter().getView(position, null, listView);
                 TextView myID = (TextView) view1.findViewById(R.id.myID);
 
                 // Opens a new view
                 Intent myIntent = new Intent(MainActivity.this, SubActivity.class);
                 myIntent.putExtra("ID", myID.getText());
                 MainActivity.this.startActivity(myIntent);
+                finish();
+            }
+        });
+        final SearchView searchView;
+        searchView = (SearchView) findViewById(R.id.searchView);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.onActionViewExpanded();
+            }
+        });
+
+        final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Do something
+                listView.setAdapter(null);
+                Cursor c = db.rawQuery(SQL.selectFilter("series", newText), null);
+                while (c.moveToNext()) {
+                    String id          = c.getString(0);
+                    String title          = c.getString(1);
+                    String episode        = c.getString(2);
+                    String season         = c.getString(3);
+                    String is_over        = c.getString(4);
+                    String rating         = c.getString(5);
+
+                    MainListRow newRow = new MainListRow(title, season, episode, rating, id);
+                    arrayOfRows.add(newRow);
+                }
+
+                adapter = new MainListAdapter(getApplicationContext(), arrayOfRows);
+                listView.setAdapter(adapter);
+                Toast.makeText(getApplicationContext(),newText,Toast.LENGTH_SHORT).show();
+                return true;
             }
 
-        });
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Do something
+                Toast.makeText(getApplicationContext(),"keysubmit",Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        };
+
+        searchView.setOnQueryTextListener(queryTextListener);
+
+
 
         //==========================================================================================
 

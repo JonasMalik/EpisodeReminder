@@ -94,5 +94,12 @@
         android:visibility="gone"
         android:id="@+id/myID"/>
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="star"
+        android:visibility="gone"
+        android:id="@+id/star"/>
+
 </RelativeLayout>
 

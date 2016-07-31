@@ -1,5 +1,6 @@
 package com.jonasmalik94.episodereminder;
 
+import android.app.Activity;
 import android.graphics.Point;
 import android.view.Display;
 
@@ -11,7 +12,7 @@ import java.util.Locale;
 /**
  * Created by jonas on 2016-06-22.
  */
-public class Functions {
+public class Functions{
 
     static public String getWeekday(){
         String weekday;

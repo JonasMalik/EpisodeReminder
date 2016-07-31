@@ -1,11 +1,13 @@
 package com.jonasmalik94.episodereminder;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import java.util.ArrayList;
 
 /**
  * Created by jonas on 2016-06-28.
  */
-public class SQL {
+public class SQL extends MainActivity{
 
     public static String createTable(String tableName, ArrayList<String> columns){
 
@@ -108,6 +110,26 @@ public class SQL {
         recordByID = "SELECT * FROM "+tableName+" WHERE Id = '"+id+"';";
 
         return recordByID;
+    }
+
+    public static void updateRating(String tableName, String id, String colum,String value){
+
+        final SQLiteDatabase db;
+
+
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+
+        db.execSQL("UPDATE "+tableName+" SET "+colum+" = " + value + " WHERE Id = " + id + ";");
+
+    }
+
+    public static String selectFilter(String tableName, String filter){
+
+        String selectFilter;
+
+        selectFilter = "SELECT * FROM "+tableName+" WHERE title LIKE "+filter+";";
+
+        return selectFilter;
     }
 
 
