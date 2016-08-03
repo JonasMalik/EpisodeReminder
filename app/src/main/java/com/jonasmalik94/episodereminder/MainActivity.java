@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ArrayList<String> values = new ArrayList<>();
     MainListAdapter adapter;
     static String path;
-    static String filter = "title";
+    static String filter = "recent";
 
 
 
@@ -58,13 +58,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+       // MenuItem item = (MenuItem) findViewById(R.id.recent);
+        //item.setCheckable(true);
+        //item.setChecked(true);
+
         //DB setup
         final SQLiteDatabase db;
-        db=openOrCreateDatabase("EpisodeReminder", MODE_PRIVATE, null);
+        db = openOrCreateDatabase("EpisodeReminder", MODE_PRIVATE, null);
         path = db.getPath();
 
         // Restore DB after restarting APP
-        db.execSQL(SQL.deleteTable("tutorial"));
+        //db.execSQL(SQL.deleteTable("tutorial"));
+        //db.execSQL(SQL.deleteTable("series"));
 
         //Create table if not exist
         columns.clear();
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         columns.add("season TEXT");
         columns.add("is_over TEXT DEFAULT 0");
         columns.add("rating TEXT DEFAULT 0");
+        columns.add("date TEXT DEFAULT 0 ");
         db.execSQL(SQL.createTable("series", columns));
 
         //Create table for tutorial
@@ -137,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int temp;
         int i = 0;
 
-        while (i < 1){
+        while (i < 0){
 
             // Adding values to DB
             columns.clear();

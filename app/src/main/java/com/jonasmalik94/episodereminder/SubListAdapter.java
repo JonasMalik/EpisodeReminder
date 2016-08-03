@@ -66,6 +66,7 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                 epi = Integer.toString(e);
                 episode.setText(epi);
                 SQL.updateValue("series", id.getText().toString(), "episode", epi);
+                SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
                 Toast.makeText(getContext(), id.getText(), Toast.LENGTH_LONG).show();
             }
         });
@@ -84,6 +85,7 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                 SQL.updateValue("series", id.getText().toString(), "season", seas);
                 SQL.updateValue("series", id.getText().toString(), "episode", "1");
                 Toast.makeText(getContext(), id.getText() + " s", Toast.LENGTH_LONG).show();
+                SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
             }
         });
 

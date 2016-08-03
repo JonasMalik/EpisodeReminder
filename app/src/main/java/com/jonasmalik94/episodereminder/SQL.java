@@ -119,7 +119,7 @@ public class SQL extends MainActivity{
 
         db = SQLiteDatabase.openOrCreateDatabase(path, null);
 
-        db.execSQL("UPDATE "+tableName+" SET "+colum+" = " + value + " WHERE Id = " + id + ";");
+        db.execSQL("UPDATE "+tableName+" SET "+colum+" = '" + value + "' WHERE Id = " + id + ";");
 
     }
 
@@ -132,7 +132,7 @@ public class SQL extends MainActivity{
             return selectFilter;
         }
         else if (sort.equals("recent")){
-            selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' ORDER BY " + sort + " ;";
+            selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' ORDER BY date DESC ;";
             return selectFilter;
         }
         else if (sort.equals("favourites")){

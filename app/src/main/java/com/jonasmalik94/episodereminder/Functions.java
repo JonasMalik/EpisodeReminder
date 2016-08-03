@@ -26,7 +26,7 @@ public class Functions{
     }
 
     static public String getDate(){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
         String date;
 
         date = sdf.format(new Date());
@@ -41,6 +41,15 @@ public class Functions{
         year = sdf.format(new Date());
 
         return year;
+    }
+
+    static public String getLatestDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String latestDate;
+
+        latestDate = sdf.format(new Date());
+
+        return latestDate;
     }
 
 
