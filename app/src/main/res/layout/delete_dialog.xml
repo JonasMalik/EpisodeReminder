@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="150dp"
     android:background="@android:drawable/dialog_holo_dark_frame"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="35sp"
-        android:text="Lägg till film/serie"
+        android:text="Radera film/serie?"
         android:id="@+id/popup_header"
         android:layout_centerHorizontal="true"
         android:textColor="@color/white"
@@ -26,25 +26,13 @@
         android:layout_below="@id/popup_header"
         android:id="@+id/underline"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/popup_title_input"
-        android:layout_below="@+id/underline"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        android:background="#373737"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Lägg till"
-        android:id="@+id/add"
+        android:text="Radera"
+        android:id="@+id/delete"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/button_layout"

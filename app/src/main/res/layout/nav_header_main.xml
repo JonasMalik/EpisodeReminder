@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/side_nav_bar"
+    android:background="@color/darkRed"
     android:gravity="top"
     android:orientation="vertical"
     android:paddingBottom="0dp"
@@ -15,15 +15,15 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Jonas Malik"
+        android:text="Created by Jonas Malik"
         android:layout_gravity="right" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="0dp"
-        android:text="Meny"
+        android:textColor="@color/black"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="@dimen/abc_action_button_min_width_overflow_material" />
+        android:textSize="18sp" />
 
 </LinearLayout>

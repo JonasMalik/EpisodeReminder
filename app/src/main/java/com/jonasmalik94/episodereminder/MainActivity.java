@@ -8,11 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -24,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,12 +37,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     ListView listView;
     TextView blur;
+    TextView tutorial_text;
+    Button tutorial_button;
+    ImageView swipe;
     EditText popup_input;
     ArrayList<MainListRow> arrayOfRows = new ArrayList<>();
     ArrayList<String> columns = new ArrayList<>();
     ArrayList<String> values = new ArrayList<>();
     MainListAdapter adapter;
     static String path;
+    static String filter = "title";
+
 
 
     @Override
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         path = db.getPath();
 
         // Restore DB after restarting APP
-        //db.execSQL(SQL.deleteTable("series"));
+        db.execSQL(SQL.deleteTable("tutorial"));
 
         //Create table if not exist
         columns.clear();
@@ -75,11 +76,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         columns.add("rating TEXT DEFAULT 0");
         db.execSQL(SQL.createTable("series", columns));
 
+        //Create table for tutorial
+        columns.clear();
+        columns.add("Id INTEGER PRIMARY KEY  NOT NULL  UNIQUE");
+        columns.add("title TEXT");
+        columns.add("show_at_start TEXT DEFAULT 1");// on
+        db.execSQL(SQL.createTable("tutorial", columns));
+
+        String count = "SELECT count(*) FROM tutorial";
+        Cursor mcursor = db.rawQuery(count, null);
+        mcursor.moveToFirst();
+        int icount = mcursor.getInt(0);
+        if(icount>0) {
+            //leave
+        }
+        else {
+            // Adding values to DB
+            columns.clear();
+            columns.add("title");
+            columns.add("show_at_start");
+            values.clear();
+            values.add("swipe"); // title
+            values.add("1"); // on
+            db.execSQL(SQL.insertValues("tutorial", columns, values));
+        }
+        swipe = (ImageView) findViewById(R.id.swipe);
+        blur = (TextView) findViewById(R.id.blur);
+        tutorial_button = (Button) findViewById(R.id.tutorial_button);
+        tutorial_text = (TextView) findViewById(R.id.tutorial_text);
+
+        tutorial_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                blur.setVisibility(View.GONE);
+                tutorial_text.setVisibility(View.GONE);
+                tutorial_button.setVisibility(View.GONE);
+                swipe.setVisibility(View.GONE);
+            }
+        });
+
+        Cursor cursor = db.rawQuery(SQL.getRecordByID("tutorial", "1"), null);
+        cursor.moveToFirst();
+        String tutorial = cursor.getString(2);
+        if (tutorial.equals("0")){
+            blur.setVisibility(View.GONE);
+            tutorial_text.setVisibility(View.GONE);
+            tutorial_button.setVisibility(View.GONE);
+            swipe.setVisibility(View.GONE);
+        }else{
+            swipe.setVisibility(View.VISIBLE);
+            blur.setVisibility(View.VISIBLE);
+            tutorial_text.setVisibility(View.VISIBLE);
+            tutorial_button.setVisibility(View.VISIBLE);
+            SQL.updateValue("tutorial","1","show_at_start","0");
+        }
+
+
+
         // Inserting some values, only a TEST!
         int temp;
         int i = 0;
 
-        while (i < 2){
+        while (i < 1){
 
             // Adding values to DB
             columns.clear();
@@ -89,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             columns.add("is_over");
             columns.add("rating");
             values.clear();
-            values.add("The walking dead"); // title
+            values.add("Exempel"); // title
             values.add("1"); // episode
             values.add("1"); // season
             values.add("0"); // is over
@@ -132,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         String text;
                         popup_input = (EditText) pw.getContentView().findViewById(R.id.popup_title_input);
                         text = popup_input.getText().toString();
-                        Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG).show();
                         pw.dismiss();
 
                         adapter = null;
@@ -202,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //==========================================================================================
         listView = (ListView) findViewById(R.id.list);
 
-        Cursor c = db.rawQuery(SQL.selectAll("series"), null);
+        Cursor c = db.rawQuery(SQL.selectFilter("series","",filter), null);
         while (c.moveToNext()) {
             String id          = c.getString(0);
             String title          = c.getString(1);
@@ -235,6 +292,80 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
             }
         });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                // sets a blurry background
+                blur = (TextView) findViewById(R.id.blur);
+                blur.setVisibility(View.VISIBLE);
+                fab.setVisibility(View.INVISIBLE);
+
+                // getting screen size
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int width = (int)(size.x*0.98);
+                int height = (int)(size.y*0.3);
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final PopupWindow pw = new PopupWindow(inflater.inflate(R.layout.delete_dialog, null, false),
+                        width,
+                        height,
+                        true);
+
+                // popup button listener
+                Button add = (Button) pw.getContentView().findViewById(R.id.delete);
+                add.setOnClickListener(new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(), "Logg raderad", Toast.LENGTH_LONG).show();
+                        pw.dismiss();
+
+                        // Getting the clicked list item by position
+                        final View view1 = listView.getAdapter().getView(position, null, listView);
+                        TextView myID = (TextView) view1.findViewById(R.id.myID);
+                        SQL.deleteRecord("series",myID.getText().toString());
+
+                        //resets adapter and array
+                        listView.setAdapter(null);
+                        arrayOfRows.clear();
+
+                        //Reload List
+                        Cursor c = db.rawQuery(SQL.selectAll("series"), null);
+                        while (c.moveToNext()) {
+                            String id          = c.getString(0);
+                            String title          = c.getString(1);
+                            String episode        = c.getString(2);
+                            String season         = c.getString(3);
+                            String is_over        = c.getString(4);
+                            String rating         = c.getString(5);
+
+                            MainListRow newRow = new MainListRow(title, season, episode, rating, id);
+                            arrayOfRows.add(newRow);
+                        }
+
+                        adapter = new MainListAdapter(getApplicationContext(), arrayOfRows);
+                        listView.setAdapter(adapter);
+                    }
+                });
+
+                // sets the position of the popup window
+                pw.showAtLocation(findViewById(R.id.main), Gravity.CENTER, 0, 0);
+
+                // sets action when popup window is closed
+                pw.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        blur.setVisibility(View.INVISIBLE);
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                return true;
+            }
+        });
+
+        // Search Listeners
         final SearchView searchView;
         searchView = (SearchView) findViewById(R.id.searchView);
         searchView.setOnClickListener(new View.OnClickListener() {
@@ -246,10 +377,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
             @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
             public boolean onQueryTextChange(String newText) {
                 // Do something
                 listView.setAdapter(null);
-                Cursor c = db.rawQuery(SQL.selectFilter("series", newText), null);
+                adapter.clear();
+                arrayOfRows.clear();
+
+                Cursor c = db.rawQuery(SQL.selectFilter("series", newText, filter), null);
                 while (c.moveToNext()) {
                     String id          = c.getString(0);
                     String title          = c.getString(1);
@@ -264,14 +403,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 adapter = new MainListAdapter(getApplicationContext(), arrayOfRows);
                 listView.setAdapter(adapter);
-                Toast.makeText(getApplicationContext(),newText,Toast.LENGTH_SHORT).show();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Do something
-                Toast.makeText(getApplicationContext(),"keysubmit",Toast.LENGTH_SHORT).show();
                 return true;
             }
         };
@@ -322,16 +453,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        final SQLiteDatabase db;
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
-
+        if (id == R.id.recent) {
+            filter = "recent";
+        } else if (id == R.id.AtoZ) {
+            filter = "title";
+        } else if (id == R.id.favourites) {
+            filter = "favourites";
         } else if (id == R.id.nav_manage) {
 
         }
+
+        listView.setAdapter(null);
+        adapter.clear();
+        arrayOfRows.clear();
+
+        db=openOrCreateDatabase("EpisodeReminder", MODE_PRIVATE, null);
+
+        Cursor c = db.rawQuery(SQL.selectFilter("series", "",filter), null);
+        while (c.moveToNext()) {
+            String myId          = c.getString(0);
+            String title          = c.getString(1);
+            String episode        = c.getString(2);
+            String season         = c.getString(3);
+            String is_over        = c.getString(4);
+            String rating         = c.getString(5);
+
+            MainListRow newRow = new MainListRow(title, season, episode, rating, myId);
+            arrayOfRows.add(newRow);
+        }
+
+        adapter = new MainListAdapter(getApplicationContext(), arrayOfRows);
+        listView.setAdapter(adapter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

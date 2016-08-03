@@ -37,6 +37,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#8d000000"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/swipe"
+        android:id="@+id/swipe"
+        android:visibility="visible" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Svep från vänster för att öppna menyn"
+        android:textSize="35sp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:paddingTop="0dp"
+        android:layout_below="@+id/swipe"
+        android:id="@+id/tutorial_text" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:id="@+id/tutorial_button"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:background="@color/buttonGreen"
+        android:layout_below="@id/tutorial_text"/>
 
 </RelativeLayout>

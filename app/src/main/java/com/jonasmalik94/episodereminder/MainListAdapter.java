@@ -1,8 +1,6 @@
 package com.jonasmalik94.episodereminder;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,11 +62,11 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
                 if (star.getText().equals("0")) {
                     rating.setImageResource(android.R.drawable.btn_star_big_on);
                     star.setText("1");
-                    SQL.updateRating("series",id.getText().toString(),"rating","1");
+                    SQL.updateValue("series", id.getText().toString(), "rating", "1");
                 }else{
                     rating.setImageResource(android.R.drawable.btn_star_big_off);
                     star.setText("0");
-                    SQL.updateRating("series", id.getText().toString(),"rating", "0");
+                    SQL.updateValue("series", id.getText().toString(), "rating", "0");
                 }
             }
         });

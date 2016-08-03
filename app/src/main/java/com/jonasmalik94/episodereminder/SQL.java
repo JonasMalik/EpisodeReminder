@@ -112,7 +112,7 @@ public class SQL extends MainActivity{
         return recordByID;
     }
 
-    public static void updateRating(String tableName, String id, String colum,String value){
+    public static void updateValue(String tableName, String id, String colum, String value){
 
         final SQLiteDatabase db;
 
@@ -123,16 +123,34 @@ public class SQL extends MainActivity{
 
     }
 
-    public static String selectFilter(String tableName, String filter){
+    public static String selectFilter(String tableName, String filter, String sort){
 
         String selectFilter;
 
-        selectFilter = "SELECT * FROM "+tableName+" WHERE title LIKE "+filter+";";
+        if (sort.equals("title")) {
+            selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' ORDER BY " + sort + " ;";
+            return selectFilter;
+        }
+        else if (sort.equals("recent")){
+            selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' ORDER BY " + sort + " ;";
+            return selectFilter;
+        }
+        else if (sort.equals("favourites")){
+            selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' AND rating = '1' ORDER BY title ;";
+            return selectFilter;
+        }
 
-        return selectFilter;
+        return null;
     }
 
+    public static void deleteRecord(String tableName, String id){
+
+        final SQLiteDatabase db;
 
 
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
 
+        db.execSQL("DELETE FROM "+tableName+" WHERE Id = " + id + ";");
+
+    }
 }
