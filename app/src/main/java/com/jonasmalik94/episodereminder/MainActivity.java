@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ListView listView;
     TextView blur;
     TextView tutorial_text;
+    TextView tot;
+    TextView watching;
+    TextView done;
     Button tutorial_button;
     ImageView swipe;
     EditText popup_input;
@@ -66,6 +69,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final SQLiteDatabase db;
         db = openOrCreateDatabase("EpisodeReminder", MODE_PRIVATE, null);
         path = db.getPath();
+
+        tot      = (TextView) findViewById(R.id.tot);
+        watching = (TextView) findViewById(R.id.watching);
+        done     = (TextView) findViewById(R.id.done);
+
+        tot.setText(String.valueOf(SQL.CountRows("series"))+" serier");
+        watching.setText(String.valueOf(SQL.CountStartedRows("series"))+" påbörjade");
+        done.setText(String.valueOf(SQL.CountFinishedRows("series"))+" avslutade");
 
         // Restore DB after restarting APP
         //db.execSQL(SQL.deleteTable("tutorial"));

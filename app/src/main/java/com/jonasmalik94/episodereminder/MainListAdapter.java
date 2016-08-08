@@ -57,7 +57,7 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
         rating.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 TextView id = (TextView) finalConvertView.findViewById(R.id.myID);
-                Toast.makeText(getContext(), id.getText(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), id.getText(), Toast.LENGTH_LONG).show();
 
                 if (star.getText().equals("0")) {
                     rating.setImageResource(android.R.drawable.btn_star_big_on);

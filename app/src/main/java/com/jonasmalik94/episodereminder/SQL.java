@@ -1,5 +1,6 @@
 package com.jonasmalik94.episodereminder;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -153,4 +154,44 @@ public class SQL extends MainActivity{
         db.execSQL("DELETE FROM "+tableName+" WHERE Id = " + id + ";");
 
     }
+
+    public static int CountRows(String tableName){
+
+        final SQLiteDatabase db;
+
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+        String countQuery = "SELECT  * FROM " + tableName;
+
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int cnt = cursor.getCount();
+        cursor.close();
+        return cnt;
+    }
+
+    public static int CountStartedRows(String tableName){
+
+        final SQLiteDatabase db;
+
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+        String countQuery = "SELECT  * FROM " + tableName + " WHERE episode > '1' OR season > '1';";
+
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int cnt = cursor.getCount();
+        cursor.close();
+        return cnt;
+    }
+
+    public static int CountFinishedRows(String tableName){
+
+        final SQLiteDatabase db;
+
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+        String countQuery = "SELECT  * FROM " + tableName + " WHERE is_over = '1';";
+
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int cnt = cursor.getCount();
+        cursor.close();
+        return cnt;
+    }
 }
+
