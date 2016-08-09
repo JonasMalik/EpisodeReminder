@@ -67,7 +67,22 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                 episode.setText(epi);
                 SQL.updateValue("series", id.getText().toString(), "episode", epi);
                 SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
-                Toast.makeText(getContext(), id.getText(), Toast.LENGTH_LONG).show();
+            }
+        });
+        newEpisode.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int e;
+                String epi;
+                TextView id = (TextView) finalConvertView.findViewById(R.id.mySubID);
+
+                e = Integer.parseInt(episode.getText().toString());
+                e = e - 1;
+                epi = Integer.toString(e);
+                episode.setText(epi);
+                SQL.updateValue("series", id.getText().toString(), "episode", epi);
+                SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
+                return true;
             }
         });
 
@@ -84,8 +99,24 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                 episode.setText("1");
                 SQL.updateValue("series", id.getText().toString(), "season", seas);
                 SQL.updateValue("series", id.getText().toString(), "episode", "1");
-                Toast.makeText(getContext(), id.getText() + " s", Toast.LENGTH_LONG).show();
                 SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
+            }
+        });
+
+        newSeason.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int s;
+                String seas;
+                TextView id = (TextView) finalConvertView.findViewById(R.id.mySubID);
+
+                s = Integer.parseInt(season.getText().toString());
+                s = s - 1;
+                seas = Integer.toString(s);
+                season.setText(seas);
+                SQL.updateValue("series", id.getText().toString(), "season", seas);
+                SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
+                return true;
             }
         });
 
