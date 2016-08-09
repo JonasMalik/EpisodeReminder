@@ -99,6 +99,7 @@
         android:text="Klar med avsnitt "
         android:layout_below="@+id/episode"
         android:layout_marginTop="20dp"
+        android:textAllCaps="false"
         android:id="@+id/new_episode"/>
     <Button
         android:layout_width="match_parent"
@@ -107,6 +108,7 @@
         android:background="@android:drawable/dialog_frame"
         android:text="Klar med säsong "
         android:layout_below="@+id/new_episode"
+        android:textAllCaps="false"
         android:id="@+id/new_season"/>
 
     <ImageView

@@ -24,7 +24,7 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         // Get the data item for this position
-        SubListRow row = getItem(position);
+        final SubListRow row = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -39,7 +39,7 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
         final TextView star = (TextView) convertView.findViewById(R.id.sub_star);
         final ImageView rating = (ImageView) convertView.findViewById(R.id.sub_rating);
         final Button newEpisode = (Button) convertView.findViewById(R.id.new_episode);
-        Button newSeason = (Button) convertView.findViewById(R.id.new_season);
+        final Button newSeason = (Button) convertView.findViewById(R.id.new_season);
 
         // Populate the data into the template view using the data object
         title.setText(row.getTitle());
@@ -47,6 +47,8 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
         episode.setText(row.getEpisode());
         myID.setText(row.getMySubID());
         star.setText(row.getRating());
+        newSeason.setText("Klar med säsong "+row.getSeason());
+        newEpisode.setText("Klar med avsnitt " + row.getEpisode());
         if (row.getRating().equals("0")){
             rating.setImageResource(android.R.drawable.btn_star_big_off);
         }else {
@@ -67,6 +69,7 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                 episode.setText(epi);
                 SQL.updateValue("series", id.getText().toString(), "episode", epi);
                 SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
+                newEpisode.setText("Klar med avsnitt " + e);
             }
         });
         newEpisode.setOnLongClickListener(new View.OnLongClickListener() {
@@ -82,6 +85,7 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                 episode.setText(epi);
                 SQL.updateValue("series", id.getText().toString(), "episode", epi);
                 SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
+                newEpisode.setText("Klar med avsnitt " + e);
                 return true;
             }
         });
@@ -100,6 +104,8 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                 SQL.updateValue("series", id.getText().toString(), "season", seas);
                 SQL.updateValue("series", id.getText().toString(), "episode", "1");
                 SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
+                newSeason.setText("Klar med säsong " + s);
+                newEpisode.setText("Klar med avsnitt 1");
             }
         });
 
@@ -116,6 +122,8 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                 season.setText(seas);
                 SQL.updateValue("series", id.getText().toString(), "season", seas);
                 SQL.updateValue("series", id.getText().toString(), "date", Functions.getLatestDate());
+                newSeason.setText("Klar med säsong " + s);
+                newEpisode.setText("Klar med avsnitt 1");
                 return true;
             }
         });
