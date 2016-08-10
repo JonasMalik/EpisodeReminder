@@ -8,20 +8,22 @@ public class SubListRow {
     private String season;
     private String episode;
     private String rating;
-
     private String mySubID;
+    private String isOver;
 
     public SubListRow(String title,
                       String season,
                       String episode,
                       String rating,
-                      String mySubID) {
+                      String mySubID,
+                      String isOver) {
 
         this.title = title;
         this.season = season;
         this.episode = episode;
         this.rating = rating;
         this.mySubID = mySubID;
+        this.isOver = isOver;
     }
 
     public String getTitle() {
@@ -62,5 +64,13 @@ public class SubListRow {
 
     public void setMySubID(String mySubID) {
         this.mySubID = mySubID;
+    }
+
+    public String getIsOver() {
+        return isOver;
+    }
+
+    public void setIsOver(String isOver) {
+        this.isOver = isOver;
     }
 }

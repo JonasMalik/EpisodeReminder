@@ -140,6 +140,10 @@ public class SQL extends MainActivity{
             selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' AND rating = '1' ORDER BY title ;";
             return selectFilter;
         }
+        else if (sort.equals("finished")){
+            selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' AND is_over = '1' ORDER BY title ;";
+            return selectFilter;
+        }
 
         return null;
     }

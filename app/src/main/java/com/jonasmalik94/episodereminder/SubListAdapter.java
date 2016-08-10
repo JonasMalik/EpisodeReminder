@@ -1,6 +1,9 @@
 package com.jonasmalik94.episodereminder;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +36,14 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
 
         // Lookup view for data population
         TextView title = (TextView) convertView.findViewById(R.id.sub_title);
-        final TextView season = (TextView) convertView.findViewById(R.id.season);
-        final TextView episode = (TextView) convertView.findViewById(R.id.episode);
-        TextView myID = (TextView) convertView.findViewById(R.id.mySubID);
-        final TextView star = (TextView) convertView.findViewById(R.id.sub_star);
-        final ImageView rating = (ImageView) convertView.findViewById(R.id.sub_rating);
-        final Button newEpisode = (Button) convertView.findViewById(R.id.new_episode);
-        final Button newSeason = (Button) convertView.findViewById(R.id.new_season);
+        TextView myID  = (TextView) convertView.findViewById(R.id.mySubID);
+        final TextView season    = (TextView) convertView.findViewById(R.id.season);
+        final TextView episode   = (TextView) convertView.findViewById(R.id.episode);
+        final TextView star      = (TextView) convertView.findViewById(R.id.sub_star);
+        final ImageView rating   = (ImageView) convertView.findViewById(R.id.sub_rating);
+        final Button newEpisode  = (Button) convertView.findViewById(R.id.new_episode);
+        final Button newSeason   = (Button) convertView.findViewById(R.id.new_season);
+        final Button serieIsDone = (Button) convertView.findViewById(R.id.serie_is_done);
 
         // Populate the data into the template view using the data object
         title.setText(row.getTitle());
@@ -53,6 +57,10 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
             rating.setImageResource(android.R.drawable.btn_star_big_off);
         }else {
             rating.setImageResource(android.R.drawable.btn_star_big_on);
+        }
+
+        if (row.getIsOver().equals("1")){
+            serieIsDone.setBackgroundResource(R.color.green);
         }
 
         // All handlers for click event
@@ -142,6 +150,24 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                     star.setText("0");
                     SQL.updateValue("series", id.getText().toString(), "rating", "0");
                 }
+            }
+        });
+
+        serieIsDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Du släppte för tidigt", Toast.LENGTH_SHORT).show();
+            }
+        });
+        serieIsDone.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                TextView id = (TextView) finalConvertView.findViewById(R.id.mySubID);
+                ObjectAnimator colorFade = ObjectAnimator.ofObject(serieIsDone, "backgroundColor", new ArgbEvaluator(),Color.rgb(144,0,0), Color.GREEN);
+                colorFade.setDuration(3000);
+                colorFade.start();
+                SQL.updateValue("series", id.getText().toString(), "is_over", "1");
+                return true;
             }
         });
 
