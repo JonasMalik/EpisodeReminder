@@ -113,7 +113,7 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:textColor="@color/white"
         android:background="@color/darkRed"
         android:text="Klar med hela serien "
@@ -123,7 +123,19 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="100dp"
-        android:id="@+id/serie_is_done"/>
+        android:id="@+id/serie_is_done" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/new_season"
+        android:src="@android:drawable/checkbox_off_background"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="100dp"
+        android:elevation="2dp"
+        android:id="@+id/checkbox"/>
+
 
     <ImageView
         android:id="@+id/sub_rating"

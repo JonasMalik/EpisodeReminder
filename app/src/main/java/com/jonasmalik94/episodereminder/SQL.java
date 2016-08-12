@@ -140,6 +140,10 @@ public class SQL extends MainActivity{
             selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' AND rating = '1' ORDER BY title ;";
             return selectFilter;
         }
+        else if (sort.equals("inSleep")){
+            selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' AND season = '1' AND episode = '1' ORDER BY title ;";
+            return selectFilter;
+        }
         else if (sort.equals("finished")){
             selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' AND is_over = '1' ORDER BY title ;";
             return selectFilter;
@@ -177,7 +181,7 @@ public class SQL extends MainActivity{
         final SQLiteDatabase db;
 
         db = SQLiteDatabase.openOrCreateDatabase(path, null);
-        String countQuery = "SELECT  * FROM " + tableName + " WHERE episode > '1' OR season > '1';";
+        String countQuery = "SELECT  * FROM " + tableName + " WHERE episode > '1' AND is_over = '0' OR season > '1' AND is_over = '0';";
 
         Cursor cursor = db.rawQuery(countQuery, null);
         int cnt = cursor.getCount();

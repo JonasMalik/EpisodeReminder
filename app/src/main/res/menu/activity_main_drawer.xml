@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/recent"
-            android:icon="@android:drawable/ic_menu_recent_history"
-            android:title="Senast ändrad" />
+            android:icon="@drawable/ic_history_white_24dp"
+            android:title="Senast ändrad"
+            android:checked="true"
+            app:itemTextColor="#ffffff"
+            />
         <item
             android:id="@+id/AtoZ"
-            android:icon="@android:drawable/ic_menu_sort_alphabetically"
-            android:title="Alfabetisk ordning" />
+            android:icon="@drawable/ic_sort_by_alpha_white_24dp"
+            android:title="Alfabetisk ordning"
+            />
         <item
             android:id="@+id/favourites"
             android:icon="@android:drawable/btn_star_big_off"
             android:title="Favoriter" />
         <item
+            android:id="@+id/inSleep"
+            android:icon="@drawable/ic_snooze_white_24dp"
+            android:title="Ej påbörjade" />
+        <item
             android:id="@+id/finished"
-            android:icon="@android:drawable/ic_menu_close_clear_cancel"
+            android:icon="@drawable/ic_close_white_24dp"
             android:title="Avslutade" />
 
     </group>

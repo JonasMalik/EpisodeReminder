@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
         final Button newEpisode  = (Button) convertView.findViewById(R.id.new_episode);
         final Button newSeason   = (Button) convertView.findViewById(R.id.new_season);
         final Button serieIsDone = (Button) convertView.findViewById(R.id.serie_is_done);
+        final ImageView checkbox = (ImageView) convertView.findViewById(R.id.checkbox);
 
         // Populate the data into the template view using the data object
         title.setText(row.getTitle());
@@ -61,6 +63,8 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
 
         if (row.getIsOver().equals("1")){
             serieIsDone.setBackgroundResource(R.color.green);
+            newEpisode.setVisibility(View.INVISIBLE);
+            newSeason.setVisibility(View.INVISIBLE);
         }
 
         // All handlers for click event
@@ -162,11 +166,21 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
         serieIsDone.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                TextView id = (TextView) finalConvertView.findViewById(R.id.mySubID);
-                ObjectAnimator colorFade = ObjectAnimator.ofObject(serieIsDone, "backgroundColor", new ArgbEvaluator(),Color.rgb(144,0,0), Color.GREEN);
-                colorFade.setDuration(3000);
-                colorFade.start();
-                SQL.updateValue("series", id.getText().toString(), "is_over", "1");
+                if (newEpisode.getVisibility() == View.VISIBLE) {
+                    TextView id = (TextView) finalConvertView.findViewById(R.id.mySubID);
+                    serieIsDone.setText("klar med hela serien");
+                    newEpisode.setVisibility(View.INVISIBLE);
+                    newSeason.setVisibility(View.INVISIBLE);
+                    checkbox.setImageResource(android.R.drawable.checkbox_on_background);
+                    SQL.updateValue("series", id.getText().toString(), "is_over", "1");
+                }else {
+                    TextView id = (TextView) finalConvertView.findViewById(R.id.mySubID);
+                    serieIsDone.setText("klar med hela serien");
+                    newEpisode.setVisibility(View.VISIBLE);
+                    newSeason.setVisibility(View.VISIBLE);
+                    checkbox.setImageResource(android.R.drawable.checkbox_off_background);
+                    SQL.updateValue("series", id.getText().toString(), "is_over", "0");
+                }
                 return true;
             }
         });

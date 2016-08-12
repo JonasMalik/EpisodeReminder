@@ -479,7 +479,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             filter = "title";
         } else if (id == R.id.favourites) {
             filter = "favourites";
-        }else if (id == R.id.finished) {
+        } else if (id == R.id.inSleep) {
+            filter = "inSleep";
+        } else if (id == R.id.finished) {
             filter = "finished";
         } else if (id == R.id.nav_manage) {
 
