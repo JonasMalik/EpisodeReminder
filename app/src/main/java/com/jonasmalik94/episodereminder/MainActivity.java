@@ -74,10 +74,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         watching = (TextView) findViewById(R.id.watching);
         done     = (TextView) findViewById(R.id.done);
 
-        tot.setText(String.valueOf(SQL.CountRows("series"))+" serier");
-        watching.setText(String.valueOf(SQL.CountStartedRows("series"))+" påbörjade");
-        done.setText(String.valueOf(SQL.CountFinishedRows("series"))+" avslutade");
-
         // Restore DB after restarting APP
         //db.execSQL(SQL.deleteTable("tutorial"));
         //db.execSQL(SQL.deleteTable("series"));
@@ -93,12 +89,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         columns.add("date TEXT DEFAULT 0 ");
         db.execSQL(SQL.createTable("series", columns));
 
+        if (SQL.isFieldExist("series","movie") == false){
+            Toast.makeText(MainActivity.this, "finns inte", Toast.LENGTH_SHORT).show();
+            SQL.createField("series", "movie", "TEXT DEFAULT 0");
+        }
+
         //Create table for tutorial
         columns.clear();
         columns.add("Id INTEGER PRIMARY KEY  NOT NULL  UNIQUE");
         columns.add("title TEXT");
         columns.add("show_at_start TEXT DEFAULT 1");// on
         db.execSQL(SQL.createTable("tutorial", columns));
+
+        tot.setText(String.valueOf(SQL.CountRows("series")) + " serier");
+        watching.setText(String.valueOf(SQL.CountStartedRows("series")) + " påbörjade");
+        done.setText(String.valueOf(SQL.CountFinishedRows("series")) + " avslutade");
 
         String count = "SELECT count(*) FROM tutorial";
         Cursor mcursor = db.rawQuery(count, null);

@@ -1,7 +1,10 @@
 package com.jonasmalik94.episodereminder;
 
+import android.app.Application;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -200,6 +203,33 @@ public class SQL extends MainActivity{
         int cnt = cursor.getCount();
         cursor.close();
         return cnt;
+    }
+
+    public static boolean isFieldExist(String tableName, String fieldName)
+    {
+        boolean isExist = false;
+        final SQLiteDatabase db;
+
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+        Cursor res = db.rawQuery("PRAGMA table_info("+tableName+")",null);
+        int value = res.getColumnIndex(fieldName);
+
+        if(value != -1)
+        {
+            isExist = true;
+        }
+        return isExist;
+    }
+
+    public static void createField(String tableName, String fieldName, String dataType) {
+
+        final SQLiteDatabase db;
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+
+        try {
+            db.execSQL("ALTER TABLE "+tableName+" ADD "+fieldName+" "+dataType);
+        }catch (Exception e){}
+
     }
 }
 
