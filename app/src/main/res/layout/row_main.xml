@@ -9,6 +9,18 @@
     android:paddingEnd="5dp">
 
     <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:text="(Serie)"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
         android:id="@+id/movie_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +31,8 @@
         android:text="Title"
         android:textColor="@color/white"
         android:textSize="35sp"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/type"/>
 
     <TextView
         android:layout_width="match_parent"

@@ -116,6 +116,21 @@ public class SQL extends MainActivity{
         return recordByID;
     }
 
+    public static String getRecordByTitle(String tableName, String title){
+
+        String recordByTitle;
+        final SQLiteDatabase db;
+
+        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+        recordByTitle = "SELECT * FROM "+tableName+" WHERE title = '"+title+"';";
+
+        Cursor cursor = db.rawQuery(recordByTitle, null);
+        cursor.moveToFirst();
+        String col = cursor.getString(2);
+        cursor.close();
+        return col;
+    }
+
     public static void updateValue(String tableName, String id, String colum, String value){
 
         final SQLiteDatabase db;
@@ -205,22 +220,6 @@ public class SQL extends MainActivity{
         return cnt;
     }
 
-    public static boolean isFieldExist(String tableName, String fieldName)
-    {
-        boolean isExist = false;
-        final SQLiteDatabase db;
-
-        db = SQLiteDatabase.openOrCreateDatabase(path, null);
-        Cursor res = db.rawQuery("PRAGMA table_info("+tableName+")",null);
-        int value = res.getColumnIndex(fieldName);
-
-        if(value != -1)
-        {
-            isExist = true;
-        }
-        return isExist;
-    }
-
     public static void createField(String tableName, String fieldName, String dataType) {
 
         final SQLiteDatabase db;
@@ -230,6 +229,23 @@ public class SQL extends MainActivity{
             db.execSQL("ALTER TABLE "+tableName+" ADD "+fieldName+" "+dataType);
         }catch (Exception e){}
 
+    }
+
+    public static void runUpdate(boolean run){
+
+        final SQLiteDatabase db;
+
+        if (run == true) {
+            db = SQLiteDatabase.openOrCreateDatabase(path, null);
+
+            // ================ ALL UPDATES ========================================================
+
+            // UPDATE 1: adding a new column to table (series)
+            if (getRecordByTitle("updates", "is_movie_added_to_db").equals("0")){
+                SQL.createField("series", "movie", "TEXT DEFAULT '0'");
+
+            }
+        }
     }
 }
 

@@ -10,17 +10,23 @@ public class MainListRow {
     private String rating;
     private String myID;
 
+
+
+    private String is_a_movie;
+
     public MainListRow(String title,
                        String season,
                        String episode,
                        String rating,
-                       String myID) {
+                       String myID,
+                       String is_a_movie) {
 
-        this.title = title;
-        this.season = season;
-        this.episode = episode;
-        this.rating = rating;
-        this.myID = myID;
+        this.title          = title;
+        this.season         = season;
+        this.episode        = episode;
+        this.rating         = rating;
+        this.myID           = myID;
+        this.is_a_movie     = is_a_movie;
     }
 
     public String getTitle() {
@@ -61,6 +67,14 @@ public class MainListRow {
 
     public void setMyID(String myID) {
         this.myID = myID;
+    }
+
+    public String getIs_a_movie() {
+        return is_a_movie;
+    }
+
+    public void setIs_a_movie(String is_a_movie) {
+        this.is_a_movie = is_a_movie;
     }
 
 

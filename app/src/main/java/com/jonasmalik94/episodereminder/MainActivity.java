@@ -61,10 +61,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       // MenuItem item = (MenuItem) findViewById(R.id.recent);
-        //item.setCheckable(true);
-        //item.setChecked(true);
-
         //DB setup
         final SQLiteDatabase db;
         db = openOrCreateDatabase("EpisodeReminder", MODE_PRIVATE, null);
@@ -75,10 +71,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         done     = (TextView) findViewById(R.id.done);
 
         // Restore DB after restarting APP
+        db.execSQL(SQL.deleteTable("series"));
         //db.execSQL(SQL.deleteTable("tutorial"));
-        //db.execSQL(SQL.deleteTable("series"));
+        //db.execSQL(SQL.deleteTable("updates"));
 
-        //Create table if not exist
+        //Create table for series
         columns.clear();
         columns.add("Id INTEGER PRIMARY KEY  NOT NULL  UNIQUE");
         columns.add("title TEXT");
@@ -89,17 +86,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         columns.add("date TEXT DEFAULT 0 ");
         db.execSQL(SQL.createTable("series", columns));
 
-        if (SQL.isFieldExist("series","movie") == false){
-            Toast.makeText(MainActivity.this, "finns inte", Toast.LENGTH_SHORT).show();
-            SQL.createField("series", "movie", "TEXT DEFAULT 0");
-        }
-
         //Create table for tutorial
         columns.clear();
         columns.add("Id INTEGER PRIMARY KEY  NOT NULL  UNIQUE");
         columns.add("title TEXT");
         columns.add("show_at_start TEXT DEFAULT 1");// on
         db.execSQL(SQL.createTable("tutorial", columns));
+
+        //Create table for updates
+        columns.clear();
+        columns.add("Id INTEGER PRIMARY KEY  NOT NULL  UNIQUE");
+        columns.add("title TEXT UNIQUE");
+        columns.add("is_updated TEXT DEFAULT 0");// false
+        db.execSQL(SQL.createTable("updates", columns));
+
+        // Adding values to DB
+        columns.clear();
+        columns.add("title");
+        columns.add("is_updated");
+        values.clear();
+        values.add("is_movie_added_to_db"); // title
+        values.add("0"); // false
+
+        try {
+            db.execSQL(SQL.insertValues("updates", columns, values));
+        }catch (Exception e){}
+
+        // Run update
+        SQL.runUpdate(true);
 
         tot.setText(String.valueOf(SQL.CountRows("series")) + " serier");
         watching.setText(String.valueOf(SQL.CountStartedRows("series")) + " påbörjade");
@@ -159,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int temp;
         int i = 0;
 
-        while (i < 0){
+        while (i < 2){
 
             // Adding values to DB
             columns.clear();
@@ -168,12 +182,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             columns.add("season");
             columns.add("is_over");
             columns.add("rating");
+            columns.add("movie");
             values.clear();
             values.add("Exempel"); // title
             values.add("1"); // episode
             values.add("1"); // season
             values.add("0"); // is over
             values.add("1"); // rating
+            values.add(Integer.toString(i)); // movie
+
 
             db.execSQL(SQL.insertValues("series", columns, values));
             i++;
@@ -240,9 +257,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         String season         = c.getString(3);
                         String is_over        = c.getString(4);
                         String rating         = c.getString(5);
+                        String date           = c.getString(6);
+                        String is_a_movie     = c.getString(7);
 
                         // Adding row to view
-                        MainListRow newRow = new MainListRow(title,season,episode,rating,id);
+                        MainListRow newRow = new MainListRow(title,season,episode,rating,id,is_a_movie);
                         arrayOfRows.add(0, newRow);
 
                         adapter = new MainListAdapter(getApplicationContext(), arrayOfRows);
@@ -289,8 +308,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String season         = c.getString(3);
             String is_over        = c.getString(4);
             String rating         = c.getString(5);
+            String date           = c.getString(6);
+            String is_a_movie     = c.getString(7);
 
-            MainListRow newRow = new MainListRow(title, season, episode, rating, id);
+            Toast.makeText(getApplicationContext(),is_a_movie, Toast.LENGTH_SHORT).show();
+
+            MainListRow newRow = new MainListRow(title, season, episode, rating, id, is_a_movie);
             arrayOfRows.add(newRow);
         }
 
@@ -310,10 +333,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Opens a new view
                 Intent myIntent = new Intent(MainActivity.this, SubActivity.class);
                 myIntent.putExtra("ID", myID.getText());
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 MainActivity.this.startActivity(myIntent);
+                //overridePendingTransition(R.anim., R.anim.fade_out);
                 finish();
             }
         });
+
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -361,8 +387,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             String season         = c.getString(3);
                             String is_over        = c.getString(4);
                             String rating         = c.getString(5);
+                            String date           = c.getString(6);
+                            String is_a_movie     = c.getString(7);
 
-                            MainListRow newRow = new MainListRow(title, season, episode, rating, id);
+                            MainListRow newRow = new MainListRow(title, season, episode, rating, id,is_a_movie);
                             arrayOfRows.add(newRow);
                         }
 
@@ -418,8 +446,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     String season         = c.getString(3);
                     String is_over        = c.getString(4);
                     String rating         = c.getString(5);
+                    String date           = c.getString(6);
+                    String is_a_movie     = c.getString(7);
 
-                    MainListRow newRow = new MainListRow(title, season, episode, rating, id);
+                    MainListRow newRow = new MainListRow(title, season, episode, rating, id, is_a_movie);
                     arrayOfRows.add(newRow);
                 }
 
@@ -506,8 +536,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String season         = c.getString(3);
             String is_over        = c.getString(4);
             String rating         = c.getString(5);
+            String date           = c.getString(6);
+            String is_a_movie     = c.getString(7);
 
-            MainListRow newRow = new MainListRow(title, season, episode, rating, myId);
+            MainListRow newRow = new MainListRow(title, season, episode, rating, myId, is_a_movie);
             arrayOfRows.add(newRow);
         }
 

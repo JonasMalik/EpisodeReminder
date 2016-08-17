@@ -34,6 +34,7 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
         TextView title = (TextView) convertView.findViewById(R.id.movie_title);
         TextView season = (TextView) convertView.findViewById(R.id.season);
         TextView episode = (TextView) convertView.findViewById(R.id.episode);
+        TextView type = (TextView) convertView.findViewById(R.id.type);
         final TextView myID = (TextView) convertView.findViewById(R.id.myID);
         final TextView star = (TextView) convertView.findViewById(R.id.star);
         final ImageView rating = (ImageView) convertView.findViewById(R.id.rating);
@@ -50,6 +51,9 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
             rating.setImageResource(android.R.drawable.btn_star_big_off);
         }else {
             rating.setImageResource(android.R.drawable.btn_star_big_on);
+        }
+        if (row.getIs_a_movie().equals("1")){
+            type.setText("(Film)");
         }
 
         // All handlers for click event
