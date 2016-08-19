@@ -8,8 +8,8 @@ android {
         applicationId "com.jonasmalik94.episodereminder"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 3
-        versionName "2.1"
+        versionCode 4
+        versionName "2.5"
     }
     buildTypes {
         release {

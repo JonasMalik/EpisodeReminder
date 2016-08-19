@@ -38,6 +38,8 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
         // Lookup view for data population
         TextView title = (TextView) convertView.findViewById(R.id.sub_title);
         TextView myID  = (TextView) convertView.findViewById(R.id.mySubID);
+        final TextView seasonText    = (TextView) convertView.findViewById(R.id.season_text);
+        final TextView episodeText    = (TextView) convertView.findViewById(R.id.episode_text);
         final TextView season    = (TextView) convertView.findViewById(R.id.season);
         final TextView episode   = (TextView) convertView.findViewById(R.id.episode);
         final TextView star      = (TextView) convertView.findViewById(R.id.sub_star);
@@ -46,6 +48,9 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
         final Button newSeason   = (Button) convertView.findViewById(R.id.new_season);
         final Button serieIsDone = (Button) convertView.findViewById(R.id.serie_is_done);
         final ImageView checkbox = (ImageView) convertView.findViewById(R.id.checkbox);
+        final TextView lastSeen = (TextView) convertView.findViewById(R.id.last_seen);
+        final TextView type = (TextView) convertView.findViewById(R.id.is_movie);
+        final TextView fav = (TextView) convertView.findViewById(R.id.fav_text);
 
         // Populate the data into the template view using the data object
         title.setText(row.getTitle());
@@ -62,9 +67,21 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
         }
 
         if (row.getIsOver().equals("1")){
-            serieIsDone.setBackgroundResource(R.color.green);
+            checkbox.setImageResource(android.R.drawable.checkbox_on_background);
             newEpisode.setVisibility(View.INVISIBLE);
             newSeason.setVisibility(View.INVISIBLE);
+        }
+        if (row.getIsMovie().equals("1")){
+            type.setText("Film");
+            fav.setVisibility(View.VISIBLE);
+            newEpisode.setVisibility(View.INVISIBLE);
+            newSeason.setVisibility(View.INVISIBLE);
+            lastSeen.setVisibility(View.INVISIBLE);
+            seasonText.setVisibility(View.INVISIBLE);
+            episodeText.setVisibility(View.INVISIBLE);
+            season.setVisibility(View.INVISIBLE);
+            episode.setVisibility(View.INVISIBLE);
+            serieIsDone.setText("Klar med filmen");
         }
 
         // All handlers for click event
@@ -180,6 +197,40 @@ public class SubListAdapter extends ArrayAdapter<SubListRow> {
                     newSeason.setVisibility(View.VISIBLE);
                     checkbox.setImageResource(android.R.drawable.checkbox_off_background);
                     SQL.updateValue("series", id.getText().toString(), "is_over", "0");
+                }
+                return true;
+            }
+        });
+
+        type.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (lastSeen.getVisibility() == View.VISIBLE) {
+                    TextView id = (TextView) finalConvertView.findViewById(R.id.mySubID);
+                    type.setText("Film");
+                    fav.setVisibility(View.VISIBLE);
+                    newEpisode.setVisibility(View.INVISIBLE);
+                    newSeason.setVisibility(View.INVISIBLE);
+                    lastSeen.setVisibility(View.INVISIBLE);
+                    seasonText.setVisibility(View.INVISIBLE);
+                    episodeText.setVisibility(View.INVISIBLE);
+                    season.setVisibility(View.INVISIBLE);
+                    episode.setVisibility(View.INVISIBLE);
+                    serieIsDone.setText("Klar med filmen");
+                    SQL.updateValue("series", id.getText().toString(), "movie", "1");
+                }else {
+                    TextView id = (TextView) finalConvertView.findViewById(R.id.mySubID);
+                    type.setText("Serie");
+                    fav.setVisibility(View.INVISIBLE);
+                    newEpisode.setVisibility(View.VISIBLE);
+                    newSeason.setVisibility(View.VISIBLE);
+                    lastSeen.setVisibility(View.VISIBLE);
+                    seasonText.setVisibility(View.VISIBLE);
+                    episodeText.setVisibility(View.VISIBLE);
+                    season.setVisibility(View.VISIBLE);
+                    episode.setVisibility(View.VISIBLE);
+                    serieIsDone.setText("Klar med hela serien");
+                    SQL.updateValue("series", id.getText().toString(), "movie", "0");
                 }
                 return true;
             }

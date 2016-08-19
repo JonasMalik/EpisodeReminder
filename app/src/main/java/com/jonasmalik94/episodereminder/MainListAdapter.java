@@ -53,7 +53,7 @@ public class MainListAdapter extends ArrayAdapter<MainListRow> {
             rating.setImageResource(android.R.drawable.btn_star_big_on);
         }
         if (row.getIs_a_movie().equals("1")){
-            type.setText("(Film)");
+            type.setText("Film");
         }
 
         // All handlers for click event

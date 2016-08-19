@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         done     = (TextView) findViewById(R.id.done);
 
         // Restore DB after restarting APP
-        db.execSQL(SQL.deleteTable("series"));
+        //db.execSQL(SQL.deleteTable("series"));
         //db.execSQL(SQL.deleteTable("tutorial"));
         //db.execSQL(SQL.deleteTable("updates"));
 
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int temp;
         int i = 0;
 
-        while (i < 2){
+        while (i < 0){
 
             // Adding values to DB
             columns.clear();
@@ -310,8 +310,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String rating         = c.getString(5);
             String date           = c.getString(6);
             String is_a_movie     = c.getString(7);
-
-            Toast.makeText(getApplicationContext(),is_a_movie, Toast.LENGTH_SHORT).show();
 
             MainListRow newRow = new MainListRow(title, season, episode, rating, id, is_a_movie);
             arrayOfRows.add(newRow);
@@ -512,6 +510,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             filter = "recent";
         } else if (id == R.id.AtoZ) {
             filter = "title";
+        }else if (id == R.id.movies) {
+            filter = "movies";
         } else if (id == R.id.favourites) {
             filter = "favourites";
         } else if (id == R.id.inSleep) {

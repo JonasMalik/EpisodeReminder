@@ -9,7 +9,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.jonasmalik94.gymlog.MainActivity"
+    tools:context="com.jonasmalik94.episodereminder.MainActivity"
     tools:showIn="@layout/app_bar_main"
     android:id="@+id/main"
     android:background="#3a3a3a"

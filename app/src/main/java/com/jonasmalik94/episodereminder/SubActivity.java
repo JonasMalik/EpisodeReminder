@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,7 +21,6 @@ import java.util.ArrayList;
  */
 public class SubActivity extends AppCompatActivity {
 
-    TextView text;
     ListView subList;
     ArrayAdapter<String> listAdapter ;
     SubListAdapter adapter;
@@ -35,6 +35,7 @@ public class SubActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sub);
 
         subList = (ListView) findViewById(R.id.subList);
+
         arrayOfRows = new ArrayList<>();
 
         Intent intent = getIntent();
@@ -51,15 +52,18 @@ public class SubActivity extends AppCompatActivity {
         String season         = c.getString(3);
         String is_over        = c.getString(4);
         String rating         = c.getString(5);
+        String is_a_movie     = c.getString(7);
 
-        SubListRow newRow = new SubListRow(title, season, episode, rating , id, is_over);
+        SubListRow newRow = new SubListRow(title, season, episode, rating , id, is_over, is_a_movie);
         arrayOfRows.add(newRow);
 
         adapter = new SubListAdapter(this, arrayOfRows);
         subList.setAdapter(adapter);
 
 
+
     }
+
     @Override
     public void onBackPressed() {
         // Opens a new view

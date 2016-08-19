@@ -6,7 +6,7 @@
         <item
             android:id="@+id/recent"
             android:icon="@drawable/ic_history_white_24dp"
-            android:title="Senast ändrad"
+            android:title="Senaste"
             android:checked="true"
             app:itemTextColor="#ffffff"
             />
@@ -15,6 +15,10 @@
             android:icon="@drawable/ic_sort_by_alpha_white_24dp"
             android:title="Alfabetisk ordning"
             />
+        <item
+            android:id="@+id/movies"
+            android:icon="@drawable/ic_movie_white_24dp"
+            android:title="Filmer" />
         <item
             android:id="@+id/favourites"
             android:icon="@android:drawable/btn_star_big_off"

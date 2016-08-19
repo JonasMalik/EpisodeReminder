@@ -166,6 +166,10 @@ public class SQL extends MainActivity{
             selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' AND is_over = '1' ORDER BY title ;";
             return selectFilter;
         }
+        else if (sort.equals("movies")){
+            selectFilter = "SELECT * FROM " + tableName + " WHERE title LIKE '%" + filter + "%' AND movie = '1' ORDER BY title ;";
+            return selectFilter;
+        }
 
         return null;
     }

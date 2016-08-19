@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:drawable/dialog_holo_dark_frame"
     android:paddingBottom="4dp"
-    android:paddingTop="20dp"
+    android:paddingTop="15dp"
     android:paddingStart="5dp"
     android:paddingEnd="5dp"
     android:longClickable="true">
@@ -17,6 +17,21 @@
         android:id="@+id/mySubID"/>
 
     <TextView
+        android:id="@+id/is_movie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:layout_marginEnd="10dp"
+        android:text="Serie"
+        android:elevation="5dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_alignParentEnd="true"
+        android:background="@color/black"/>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
@@ -24,7 +39,9 @@
         android:textSize="35sp"
         android:text="Title"
         android:textColor="@color/white"
-        android:id="@+id/sub_title"/>
+        android:id="@+id/sub_title"
+        android:layout_below="@+id/is_movie"/>
+
     <View
         android:id="@+id/h_line"
         android:layout_width="match_parent"
@@ -59,6 +76,21 @@
         android:textSize="25sp"
         android:layout_alignParentStart="false"
         android:layout_below="@+id/last_seen"/>
+
+    <TextView
+        android:id="@+id/fav_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="10dp"
+        android:text="Lägg till som favorit"
+        android:visibility="invisible"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/last_seen"/>
+
     <TextView
         android:id="@+id/season"
         android:layout_width="wrap_content"
@@ -94,21 +126,28 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/dialog_frame"
+        android:background="@color/black"
         android:textColor="@color/white"
         android:text="Klar med avsnitt "
         android:layout_below="@+id/episode"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:textAllCaps="false"
+        android:textSize="17sp"
         android:id="@+id/new_episode"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:background="@android:drawable/dialog_frame"
+        android:background="@color/black"
         android:text="Klar med säsong "
         android:layout_below="@+id/new_episode"
         android:textAllCaps="false"
+        android:textSize="17sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:id="@+id/new_season"/>
 
     <Button
@@ -123,6 +162,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="100dp"
+        android:textSize="17sp"
         android:id="@+id/serie_is_done" />
 
     <ImageView
