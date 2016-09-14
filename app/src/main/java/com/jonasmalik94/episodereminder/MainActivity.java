@@ -1,13 +1,16 @@
 package com.jonasmalik94.episodereminder;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,6 +34,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // creating backup
+
+        //Functions.exportDatabse("EpisodeReminder", getPackageName());
 
         //DB setup
         final SQLiteDatabase db;
@@ -519,6 +531,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.finished) {
             filter = "finished";
         } else if (id == R.id.nav_manage) {
+            //exportDB();
+            Intent myExportIntent = new Intent(MainActivity.this, ExportActivity.class);
+            MainActivity.this.startActivity(myExportIntent);
+
 
         }
 
@@ -550,6 +566,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    private void exportDB(){
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
+
+        String SAMPLE_DB_NAME = "EpisodeReminder";
+        File sd = Environment.getExternalStorageDirectory() ;
+        File data = Environment.getDataDirectory();
+        FileChannel source=null;
+        FileChannel destination=null;
+        String currentDBPath = "/data/"+ "com.jonasmalik94.episodereminder" +"/databases/"+SAMPLE_DB_NAME;
+        String backupDBPath = SAMPLE_DB_NAME;
+        File currentDB = new File(data, currentDBPath);
+        File backupDB = new File(sd, backupDBPath);
+        try {
+            source = new FileInputStream(currentDB).getChannel();
+            destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            source.close();
+            destination.close();
+            Toast.makeText(this, "DB Exported!", Toast.LENGTH_LONG).show();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
 
 
